@@ -9,7 +9,7 @@ const Country = ({country}) => {
     useEffect(() => {
         const api_key = process.env.REACT_APP_API_KEY
         axios
-          .get(`http://api.weatherstack.com/current?access_key=${api_key}&query=${country.capital}&wind_speed`)
+          .get(`http://api.weatherstack.com/current?access_key=${api_key}&query=${country.capital}`)
           .then(response => {
             setWeather(response.data.current)
           })
