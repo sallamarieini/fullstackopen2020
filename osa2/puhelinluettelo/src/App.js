@@ -45,6 +45,16 @@ const App = () => {
     }
   }
 
+  const deletePerson = (id, name) => {
+    if (window.confirm(`Delete ${name}?`)) {
+      personService
+        .deletePerson(id)
+        .then(deletedPerson => {
+          setPersons(persons.filter(person => person.id !== id))
+        })
+    }
+  }
+
   const handlePersonChange = (event) => {
     setNewName(event.target.value)
   }
@@ -60,7 +70,7 @@ const App = () => {
   const listing = () => ( persons
     .filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
     .map(person =>
-      <Person key={person.name} person={person}/>)
+      <Person key={person.name} person={person} deletePerson={() => deletePerson(person.id, person.name)}/>)
   )
   
 
