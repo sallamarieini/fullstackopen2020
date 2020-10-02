@@ -29,7 +29,18 @@ const App = () => {
     event.preventDefault()
 
     if (alreadyAdded(newName)) {
-      window.alert(`${newName} is already added to phonebook`)
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with  a new one?`)) {
+        const person = persons.find(person => person.name === newName)
+        const changedPerson = { ...person, number: newNumber}
+
+        personService
+          .update(changedPerson.id, changedPerson)
+          .then(response => {
+            setPersons(persons.map(person => person.id !== changedPerson.id ? person: changedPerson))
+            setNewNumber('')
+            setNewName('')
+          })
+      }
     } else {
       const personObject = {
         name: newName,
@@ -67,12 +78,10 @@ const App = () => {
     setFilter(event.target.value)
   }
 
-  const listing = () => ( persons
+  const listing = () => persons
     .filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
     .map(person =>
-      <Person key={person.name} person={person} deletePerson={() => deletePerson(person.id, person.name)}/>)
-  )
-  
+      <Person key={person.id} person={person} deletePerson={() => deletePerson(person.id, person.name)}/>)
 
   return (
     <div>
