@@ -11,6 +11,7 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter ] = useState('')
   const [ notifyMessage, setNotifyMessage ] = useState(null)
+  const [ notifyStyle, setNotifyStyle ] = useState('')
 
   useEffect(() => {
     personService
@@ -41,7 +42,17 @@ const App = () => {
             setPersons(persons.map(person => person.id !== changedPerson.id ? person: changedPerson))
             setNewNumber('')
             setNewName('')
+            setNotifyStyle('notify')
             setNotifyMessage(`Edited ${changedPerson.name}`)
+          })
+          .catch(error => {
+            setNotifyStyle('error')
+            setNotifyMessage(
+              `Information of ${changedPerson.name} has already been removed from server`
+            )
+            setTimeout(() => {
+              setNotifyMessage(null)
+            }, 3000)
           })
       }
     } else {
@@ -55,6 +66,7 @@ const App = () => {
             setPersons(persons.concat(returnedPerson))
             setNewName('')
             setNewNumber('')
+            setNotifyStyle('notify')
             setNotifyMessage(`Added ${returnedPerson.name}`)
           })
     }
@@ -69,6 +81,7 @@ const App = () => {
         .deletePerson(id)
         .then(deletedPerson => {
           setPersons(persons.filter(person => person.id !== id))
+          setNotifyStyle('notify')
           setNotifyMessage(`Deleted ${name}`)
         })
     }
@@ -97,7 +110,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notifyMessage} />
+      <Notification message={notifyMessage} style={notifyStyle} />
       <FilterForm value={filter} onChange={handleFilterChange}/>
       <h2>Add a new</h2>
       <NewPersonForm 

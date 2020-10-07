@@ -1,13 +1,13 @@
 import React from 'react'
 
-const Notification = ({ message }) => {
-    if (message === null) {
+const Notification = (props) => {
+    if (props.message === null) {
         return null
     }
 
     return (
-        <div className="notify">
-            {message}
+        <div className={props.style}>
+            {props.message}
         </div>
     )
 }
