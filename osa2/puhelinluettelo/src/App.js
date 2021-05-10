@@ -46,10 +46,14 @@ const App = () => {
             setNotifyMessage(`Edited ${changedPerson.name}`)
           })
           .catch(error => {
+            if (error.response.status === 406) {
+              setNotifyStyle('error')
+              setNotifyMessage(`${error.response.data.error}`)
+            } else {
             setNotifyStyle('error')
             setNotifyMessage(
               `Information of ${changedPerson.name} has already been removed from server`
-            )
+            )}
             setTimeout(() => {
               setNotifyMessage(null)
             }, 3000)
@@ -68,6 +72,10 @@ const App = () => {
             setNewNumber('')
             setNotifyStyle('notify')
             setNotifyMessage(`Added ${returnedPerson.name}`)
+          })
+          .catch(error => {
+            setNotifyStyle('error')
+            setNotifyMessage(`${error.response.data.error}`)
           })
     }
     setTimeout(() => {
